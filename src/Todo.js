@@ -26,17 +26,25 @@ const Todo = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Create the new task and date object
     const newTodoItems = {
-      // Create the new task and date object
       newtasks: currTask,
       newDate: selectDate,
     };
 
-    setTodoItems([...todoItems, newTodoItems]); // update the array with the new array
+    if (editIndex !== null) {
+      //we check whether we are editing or not, we update the task if we are editing
+      const updatedTodoitem = [...todoItems];
+      updatedTodoitem[editIndex] = newTodoItems;
+      setTodoItems(updatedTodoitem);
+      setEditedIndex(null);
+    } else {
+      // if we are not editing, add a new task to the array
+      setTodoItems([...todoItems, newTodoItems]);
+    }
 
-    console.log(newTodoItems);
-
-    setValue(""); // Reset the form field after submiting
+    // Reset the form field after submiting
+    setValue("");
     setSelectDate(null);
     setShow(false);
   };
@@ -224,7 +232,7 @@ const Todo = () => {
               cursor: !currTask ? "not-allowed" : "pointer",
             }}
           >
-            Add task
+            {editIndex !== null ? "Update task" : "Add task"}
           </button>
         </form>
       )}
